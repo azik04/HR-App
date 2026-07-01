@@ -8,12 +8,13 @@ public class PaginatedResponse<T> : BaseResponse
     public int PageNumber { get; init; }
     public int PageSize { get; init; }
     public int TotalCount { get; init; }
+    public int TotalPages { get; init; }
 
     public bool HasNextPage => PageNumber * PageSize < TotalCount;
     public bool HasPrevPage => PageNumber > 1;
 
 
-    public static PaginatedResponse<T> Ok(IEnumerable<T>? data, int pageNumber, int pageSize, int totalCount)
+    public static PaginatedResponse<T> Ok(IEnumerable<T>? data, int pageNumber, int pageSize, int totalCount, int totalPages)
     {
         return new PaginatedResponse<T>
         {
@@ -21,6 +22,7 @@ public class PaginatedResponse<T> : BaseResponse
             PageNumber = pageNumber,
             PageSize = pageSize,
             TotalCount = totalCount,
+            TotalPages = totalPages,
             Success = true,
             Message = "Data retrieved successfully."
         };

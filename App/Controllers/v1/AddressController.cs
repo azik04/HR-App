@@ -64,17 +64,17 @@ public class AddressController : ApiControllerBase
     /// <returns>Returns update adress result</returns>
     [ProducesResponseType(typeof(GenericResponse<bool>), StatusCodes.Status200OK)]
     [HttpPut("id/{id}")]
-    public async Task<IActionResult> UpdateAsunc([FromRoute] int id, [FromBody] UpdateAddressCommand request)
+    public async Task<IActionResult> UpdateAsunc([FromRoute] int id, [FromBody] UpdateAddressCommand command)
     {
-        var command = new UpdateAddressCommand(
+        var request = new UpdateAddressCommand(
             id,
-            request.Name,
-            request.Lat,
-            request.Lng,
-            request.Address
+            command.Name,
+            command.Lat,
+            command.Lng,
+            command.Address
         );
 
-        var res = await Mediator.Send(command);
+        var res = await Mediator.Send(request);
         return res.Success ? Ok(res) : BadRequest(res);
     }
 

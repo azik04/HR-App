@@ -1,8 +1,6 @@
 ﻿using App.Application.Common.DTO.Account;
-using App.Application.Common.Interfaces;
 using App.Application.Common.Interfaces.Account;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
 using MediatR;
 
 namespace App.Application.Account.Query.GetAll;

@@ -60,11 +60,11 @@ public class AccountService : IAccountService
     public async Task<GenericResponse<GetByIdAccount>> GetById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+            return GenericResponse<GetByIdAccount>.Fail("User not found");
 
         var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
 
-        if (user == null)
-            return GenericResponse<GetByIdAccount>.Fail("User not found");
         
         var dto = new GetByIdAccount
         {
@@ -181,7 +181,7 @@ public class AccountService : IAccountService
 
     public async Task<PaginatedResponse<GetByIdAccount>> GetAllAsync(int pageNumber, int pageSize, string roleId)
     {
-        var role = _roleManager.FindByIdAsync(roleId);
+        var role = await _roleManager.FindByIdAsync(roleId);
         if (role == null)
             return PaginatedResponse<GetByIdAccount>.Fail("Role not found");
 
@@ -190,23 +190,25 @@ public class AccountService : IAccountService
                 .Any(ur => ur.UserId == u.Id && ur.RoleId == roleId));
 
         var totalCount = await query.CountAsync();
-
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        
         var data = await query
             .OrderBy(x => x.Id)
+            .Include(x => x.Worker)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .Select(x => new GetByIdAccount()
             {
                 Id = x.Id,
-                Name = x.UserName,
-                Surname = x.UserName,
+                Name = x.Worker.Name,
+                Surname = x.Worker.Surname,
                 Email = x.Email,
                 PhoneNumber = x.PhoneNumber,
-                ClientId = x.ClientId,
                 WorkerId = x.WorkerId,
+                FilePath = x.Worker.FilePath
             })
             .ToListAsync();
 
-        return PaginatedResponse<GetByIdAccount>.Ok(data, pageNumber, pageSize, totalCount);
+        return PaginatedResponse<GetByIdAccount>.Ok(data, pageNumber, pageSize, totalCount, totalPages);
     }
 }
