@@ -6,6 +6,8 @@ public class GetByIdWorkerDto
     public string Name { get; set; }
     public string Surname { get; set; }
     public decimal Rating { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Pin { get; set; }
     public string? FilePath { get; set; }
     public List<string> Service { get; set; }
     public int ReviewCount { get; set; }

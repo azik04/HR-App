@@ -35,6 +35,8 @@ public class GetByIdWorkerQueryHandler : IRequestHandler<GetByIdWorkerQuery, Gen
             Service = data.WorkerService.Select(x => x.Service.Name).ToList(),
             Rating = data.Rating,
             ReviewCount = data.Review.Count,
+            Pin = data.Pin,
+            PhoneNumber = data.PhoneNumber,
             HistoryCount = data.WorkerJob.Where(x => x.WorkerId == data.Id && x.Status == Domain.Enums.WorkerJobStatus.Completed).Count()
         };
         

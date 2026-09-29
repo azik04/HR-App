@@ -4,4 +4,4 @@ using MediatR;
 
 namespace App.Application.Reviews.Query.GetAll;
 
-public record GetAllReviewQuery(Guid workerId) : IRequest<GenericResponse<List<GetAllReviewDto>>>;
+public record GetAllReviewQuery(string appId) : IRequest<GenericResponse<List<GetAllReviewDto>>>;

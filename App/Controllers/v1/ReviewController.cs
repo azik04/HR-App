@@ -20,7 +20,7 @@ public class ReviewController : ApiControllerBase
     /// <param name="command">Contains the worker identifier.</param>
     /// <returns>Returns a list of reviews associated with the specified worker.</returns>
     [ProducesResponseType(typeof(GenericResponse<List<GetAllReviewDto>>), StatusCodes.Status200OK)]
-    [HttpGet("worker/{workerId}")]
+    [HttpGet("appId/{appId}")]
     public async Task<IActionResult> GetAllAsync([FromRoute] GetAllReviewQuery command)
     {
         var res = await Mediator.Send(command);
@@ -35,7 +35,7 @@ public class ReviewController : ApiControllerBase
     /// <returns>Returns the result of the review creation process.</returns>
     [ProducesResponseType(typeof(GenericResponse<bool>), StatusCodes.Status200OK)]
     [HttpPost]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateReviewCommand command)
+    public async Task<IActionResult> CreateAsync([FromQuery] CreateReviewCommand command)
     {
         var res = await Mediator.Send(command);
         return res.Success ? Ok(res) : BadRequest(res);

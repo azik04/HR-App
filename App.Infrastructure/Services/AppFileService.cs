@@ -24,6 +24,10 @@ public class AppFileService : IAppFileService
                 fileDirectory = Path.Combine("wwwroot", "Profiles");
                 break;
 
+            case FileTypes.Review:
+                fileDirectory = Path.Combine("wwwroot", "Review");
+                break;
+
             default:
                 return GenericResponse<List<string>>.Fail("Folder not found");
         }

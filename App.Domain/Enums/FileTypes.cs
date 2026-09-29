@@ -3,5 +3,6 @@
 public enum FileTypes
 {
     Profile = 1,
-    Job = 2
+    Job = 2,
+    Review = 3
 }

@@ -1,8 +1,5 @@
-﻿using App.Application.Address.Query.GetAll;
-using App.Application.Common.DTO.ContactUs;
-using App.Application.Common.DTO.Refresh;
+﻿using App.Application.Common.DTO.Refresh;
 using App.Application.Common.Responses;
-using App.Application.ContactUs.Query.GetById;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 

@@ -52,6 +52,7 @@ public static class ServiceDependency
         services.AddScoped<IGenericRepository<ContactUs>, GenericRepository<ContactUs>>();
         services.AddScoped<IGenericRepository<WorkerServices>, GenericRepository<WorkerServices>>();
         services.AddScoped<IGenericRepository<WorkerJobs>, GenericRepository<WorkerJobs>>();
+        services.AddScoped<IGenericRepository<ReviewFiles>, GenericRepository<ReviewFiles>>();
 
         services.AddTransient<UserBackgroundJob>();
 
