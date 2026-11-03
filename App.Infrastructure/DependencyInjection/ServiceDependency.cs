@@ -54,7 +54,10 @@ public static class ServiceDependency
         services.AddScoped<IGenericRepository<WorkerJobs>, GenericRepository<WorkerJobs>>();
         services.AddScoped<IGenericRepository<ReviewFiles>, GenericRepository<ReviewFiles>>();
 
+        services.AddHttpClient();
+
         services.AddTransient<UserBackgroundJob>();
+        services.AddTransient<HostCheckBackgroundJob>();
 
         services.Configure<JwtSettings>(
             configuration.GetSection("JWT"));
