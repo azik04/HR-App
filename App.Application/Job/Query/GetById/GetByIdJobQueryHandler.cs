@@ -1,10 +1,8 @@
-﻿using App.Application.Common.DTO.Job;
-using App.Application.Common.DTO.WorkerJob;
-using App.Application.Common.DTO.WorkerJobHistory;
-using App.Application.Common.Interfaces;
+﻿using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.History;
-using App.Domain.Entities.Main;
+using App.Application.WorkerJob.Query.GetAll;
+using App.Application.WorkerJobHistory.Query.GetAll;
+using App.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,18 +45,19 @@ public class GetByIdJobQueryHandler : IRequestHandler<GetByIdJobQuery, GenericRe
             ClientName = item.Client.Name + " " + item.Client.Surname,
             ServiceId = item.ServiceId,
             ServiceName = item.Service.Name,
-            Status = item.Statuses.ToString(),
+            Status = item.JobStatuses.ToString(),
             Name = item.Name,
             AppFile = item.JobFile.Select(ph => ph.FilePath).ToList(),
-            WorkerJob = item.WorkerJob.Select(wj => new GetByIdWorkerJobDto
+            WorkerJob = item.WorkerJob.Select(wj => new GetAllWorkerJobDto
             {
                 Status = wj.Status.ToString(),
                 Id = wj.Id,
                 WorkerId = wj.WorkerId,
                 WorkerName = wj.Workers.Name + " " + wj.Workers.Surname,
-                JobId = wj.JobId,
                 FinishAt = wj.FinishAt?.ToString("dd:MM:yyyy HH:mm"),
                 CreateAt = wj.CreateAt.ToString("dd:MM:yyyy HH:mm"),
+                JobId = item.Id,
+                JobName = item.Name,
             }).FirstOrDefault(),
             WorkerJobHistory = item.WorkerJobHistory.Select(wj => new GetAllWorkerJobHistoryDto
             {
@@ -68,6 +67,8 @@ public class GetByIdJobQueryHandler : IRequestHandler<GetByIdJobQuery, GenericRe
                 WorkerName = wj.Workers.Name + " " + wj.Workers.Surname,
                 FinishAt = wj.FinishAt?.ToString("dd:MM:yyyy HH:mm"),
                 CreateAt = wj.CreateAt.ToString("dd:MM:yyyy HH:mm"),
+                JobId = item.Id,
+                JobName = item.Name,
             }).OrderByDescending(x => x.CreateAt).ToList(),
 
         };

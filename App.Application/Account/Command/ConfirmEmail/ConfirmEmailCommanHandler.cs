@@ -1,4 +1,4 @@
-﻿using App.Application.Common.Interfaces.Account;
+﻿using App.Application.Common.Interfaces;
 using App.Application.Common.Responses;
 using MediatR;
 
@@ -8,9 +8,7 @@ public class ConfirmEmailCommanHandler : IRequestHandler<ConfirmEmailCommand, Ge
 {
     private readonly IAccountService _accountService;
     public ConfirmEmailCommanHandler(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
+        => _accountService = accountService;
 
 
     public async Task<GenericResponse<bool>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)

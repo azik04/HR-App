@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
+﻿using App.Application.Common.Interfaces;
 using App.Application.Common.Responses;
 using MediatR;
 
@@ -12,9 +8,7 @@ public class BanCommandHandler : IRequestHandler<BanCommand, GenericResponse<boo
 {
     private readonly IAccountService _accountService;
     public BanCommandHandler(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
+        => _accountService = accountService;
 
 
     public async Task<GenericResponse<bool>> Handle(BanCommand request, CancellationToken cancellationToken)

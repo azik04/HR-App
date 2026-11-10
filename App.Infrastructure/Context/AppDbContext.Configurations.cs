@@ -1,8 +1,4 @@
-﻿using App.Infrastructure.Configuration.Acc;
-using App.Infrastructure.Configuration.History;
-using App.Infrastructure.Configuration.List;
-using App.Infrastructure.Configuration.Main;
-using App.Infrastructure.Configuration.Rel;
+﻿using App.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Context;
@@ -23,7 +19,6 @@ public partial class AppDbContext
         builder.ApplyConfiguration(new AddressConfiguration());
         builder.ApplyConfiguration(new ReviewFileConfiguration());
         builder.ApplyConfiguration(new ServiceConfiguration());
-        builder.ApplyConfiguration(new SmsTypeConfiguration());
 
         builder.ApplyConfiguration(new ContactUsConfiguration());
         builder.ApplyConfiguration(new JobConfiguration());

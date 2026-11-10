@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace App.Application.Account.Command.ResetPassword
 {
-    public class ResetPasswordCommandValidation : AbstractValidator<ResetPasswordCommand>
+    public class ResetPasswordCommandValidation : AbstractValidator<ResetPasswordDto>
     {
         public ResetPasswordCommandValidation()
         {

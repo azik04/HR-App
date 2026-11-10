@@ -8,7 +8,6 @@ using App.Application.Account.Command.SentMail;
 using App.Application.Account.Command.SignUp;
 using App.Application.Account.Command.Update;
 using App.Application.Account.Query.GetAll;
-using App.Application.Common.DTO.Account;
 using App.Application.Common.Responses;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +24,7 @@ public class AccountController : ApiControllerBase
     /// </summary>
     /// <param name="query">Contains user's params.</param>
     /// <returns>Returns update result.</returns>
-    [ProducesResponseType(typeof(PaginatedResponse<GetByIdAccount>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginatedResponse<GetByIdAccountDto>), StatusCodes.Status200OK)]
     [HttpGet("get-all")]
     public async Task<IActionResult> GetAllAsync([FromQuery] GetAllAccountQuery query)
     {

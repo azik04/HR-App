@@ -1,8 +1,8 @@
 ﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
-using App.Application.Common.Interfaces.File;
+using App.Application.Common.Interfaces.Helpers;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
+using App.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 

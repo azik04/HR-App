@@ -1,4 +1,4 @@
-﻿using App.Application.Common.Interfaces.File;
+﻿using App.Application.Common.Interfaces.Helpers;
 using App.Application.Common.Responses;
 using App.Domain.Enums;
 using Microsoft.AspNetCore.Http;

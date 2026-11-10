@@ -1,9 +1,10 @@
-﻿using App.Application.Common.DTO.Account;
+﻿using App.Application.Account.Command.ChangePassword;
+using App.Application.Account.Command.ResetPassword;
+using App.Application.Account.Command.SignUp;
+using App.Application.Account.Query.GetAll;
 using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
 using App.Application.Common.Interfaces.Integrations;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
 using App.Domain.Enums;
 using App.Infrastructure.Context;
 using App.Infrastructure.Identity;
@@ -15,22 +16,20 @@ namespace App.Infrastructure.Services;
 public class AccountService : IAccountService
 {
     private readonly UserManager<ApplicationUsers> _userManager;
-    private readonly IGenericRepository<Clients> _clientRep;
     private readonly IEmailService _emailService;
     private readonly AppDbContext _db;
     private readonly RoleManager<IdentityRole> _roleManager;
 
     public AccountService(UserManager<ApplicationUsers> userManager,RoleManager<IdentityRole> roleManager, 
-        IGenericRepository<Clients> clientRep, IEmailService emailService, AppDbContext db)
+        IEmailService emailService, AppDbContext db)
     {
         _db = db;
         _emailService = emailService;
         _userManager = userManager;
-        _clientRep = clientRep;
         _roleManager = roleManager;
     }
 
-    public async Task<GenericResponse<bool>> SignUpAsync(CreateIdentityDto dto, Guid? workerId, Guid? clientId)
+    public async Task<GenericResponse<bool>> SignUpAsync(SignUpDto dto, Guid? workerId, Guid? clientId)
     {
         var entity = await _userManager.FindByEmailAsync(dto.Email);
         if (entity != null)
@@ -57,16 +56,16 @@ public class AccountService : IAccountService
         return GenericResponse<bool>.Ok(true);
     }
     
-    public async Task<GenericResponse<GetByIdAccount>> GetById(string id)
+    public async Task<GenericResponse<GetByIdAccountDto>> GetById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
-            return GenericResponse<GetByIdAccount>.Fail("User not found");
+            return GenericResponse<GetByIdAccountDto>.Fail("User not found");
 
         var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
 
         
-        var dto = new GetByIdAccount
+        var dto = new GetByIdAccountDto
         {
             Id = user.Id,
             Name = user.UserName,
@@ -78,7 +77,7 @@ public class AccountService : IAccountService
             RoleName = role
         };
 
-        return GenericResponse<GetByIdAccount>.Ok(dto);
+        return GenericResponse<GetByIdAccountDto>.Ok(dto);
     }
 
 
@@ -125,14 +124,14 @@ public class AccountService : IAccountService
         return GenericResponse<bool>.Ok(true);
     }
 
-    public async Task<GenericResponse<bool>> ResetPasswordAsync(string userId, string token, ResetPasswordDto dto)
+    public async Task<GenericResponse<bool>> ResetPasswordAsync(ResetPasswordDto dto)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(dto.UserId);
 
         if (user == null)
             return GenericResponse<bool>.Fail("User not found");
 
-        var data = await _userManager.ResetPasswordAsync(user, token, dto.confirmNewPassword);
+        var data = await _userManager.ResetPasswordAsync(user, dto.Token, dto.ConfirmNewPassword);
         if (!data.Succeeded)
             return GenericResponse<bool>.Fail("Something went wrong");
 
@@ -179,11 +178,11 @@ public class AccountService : IAccountService
         return GenericResponse<bool>.Ok(true);
     }
 
-    public async Task<PaginatedResponse<GetByIdAccount>> GetAllAsync(int pageNumber, int pageSize, string roleId)
+    public async Task<PaginatedResponse<GetByIdAccountDto>> GetAllAsync(int pageNumber, int pageSize, string roleId)
     {
         var role = await _roleManager.FindByIdAsync(roleId);
         if (role == null)
-            return PaginatedResponse<GetByIdAccount>.Fail("Role not found");
+            return PaginatedResponse<GetByIdAccountDto>.Fail("Role not found");
 
         var query = _userManager.Users
             .Where(u => _db.UserRoles
@@ -197,7 +196,7 @@ public class AccountService : IAccountService
             .Include(x => x.Worker)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(x => new GetByIdAccount()
+            .Select(x => new GetByIdAccountDto()
             {
                 Id = x.Id,
                 Name = x.Worker.Name,
@@ -209,6 +208,6 @@ public class AccountService : IAccountService
             })
             .ToListAsync();
 
-        return PaginatedResponse<GetByIdAccount>.Ok(data, pageNumber, pageSize, totalCount, totalPages);
+        return PaginatedResponse<GetByIdAccountDto>.Ok(data, pageNumber, pageSize, totalCount, totalPages);
     }
 }

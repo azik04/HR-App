@@ -1,4 +1,4 @@
-using App.Application.Common.Interfaces.Auth;
+using App.Application.Common.Interfaces;
 using App.Application.Common.Responses;
 using MediatR;
 
@@ -7,8 +7,9 @@ namespace App.Application.Auth.Command.SignOut;
 public class SignOutCommandHandler : IRequestHandler<SignOutCommand, GenericResponse<bool>>
 {
     private readonly IAuthService _authService;
-
-    public SignOutCommandHandler(IAuthService authService) => _authService = authService;
+    public SignOutCommandHandler(IAuthService authService)
+        => _authService = authService;
+   
     
     public async Task<GenericResponse<bool>> Handle(SignOutCommand request, CancellationToken cancellationToken)
     {

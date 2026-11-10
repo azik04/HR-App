@@ -1,0 +1,17 @@
+﻿using App.Domain.Enums;
+
+namespace App.Domain.Entities;
+
+public class WorkerJobHistories
+{
+    public long Id { get; set; }
+    public Guid WorkerJobId { get; set; }
+    public WorkerJobs WorkerJob { get; set; }
+    public Guid WorkerId { get; set; }
+    public Workers Workers { get; set; }
+    public Guid JobId { get; set; }
+    public Jobs Jobs { get; set; }
+    public WorkerJobStatus Status { get; set; }
+    public DateTime CreateAt { get; set; }
+    public DateTime? FinishAt { get; set; }
+}

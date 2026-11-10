@@ -1,7 +1,6 @@
-using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Address;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.List;
+using App.Domain.Entities;
 using MediatR;
 
 namespace App.Application.Address.Command.Delate;

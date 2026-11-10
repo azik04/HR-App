@@ -1,4 +1,3 @@
-using App.Application.Common.DTO.Worker;
 using App.Application.Common.Responses;
 using App.Application.Worker.Query.GetById;
 using Asp.Versioning;

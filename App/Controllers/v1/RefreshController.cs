@@ -1,5 +1,5 @@
-﻿using App.Application.Common.DTO.Refresh;
-using App.Application.Common.Responses;
+﻿using App.Application.Common.Responses;
+using App.Application.Refreshes.Query.GetAll;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +16,9 @@ public class RefreshController : ApiControllerBase
     /// <returns>Returns a daily sign in statistics result.</returns>
     [ProducesResponseType(typeof(GenericResponse<List<GetAllRefreshDto>>), StatusCodes.Status200OK)]
     [HttpGet("statistics")]
-    public async Task<IActionResult> GetAllAsync()
+    public async Task<IActionResult> GetAllAsync(GetAllRefreshQuery request)
     {
-        var res = await Mediator.Send(new Application.Refreshes.Query.GetAllRefreshCommand());
+        var res = await Mediator.Send(request);
         return res.Success ? Ok(res) : BadRequest(res);
     }
 }

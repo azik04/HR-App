@@ -1,5 +1,5 @@
+using App.Application.Client.Query;
 using App.Application.Client.Query.GetById;
-using App.Application.Common.DTO.Client;
 using App.Application.Common.Responses;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,6 @@
-﻿using App.Application.Common.DTO.Client;
-using App.Application.Common.Interfaces;
+﻿using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
+using App.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +9,14 @@ namespace App.Application.Client.Query.GetById;
 public class GetByIdClientQueryHandler : IRequestHandler<GetByIdClientQuery, GenericResponse<GetByIdClientDto>>
 {
     private readonly IGenericRepository<Clients> _clientRepository;
-    public GetByIdClientQueryHandler(IGenericRepository<Clients> clientRepository) => _clientRepository = clientRepository;
+    public GetByIdClientQueryHandler(
+        IGenericRepository<Clients> clientRepository) 
+        => _clientRepository = clientRepository;
 
 
-    public async Task<GenericResponse<GetByIdClientDto>> Handle(GetByIdClientQuery request, CancellationToken cancellationToken)
+    public async Task<GenericResponse<GetByIdClientDto>> Handle(
+        GetByIdClientQuery request, 
+        CancellationToken cancellationToken)
     {
         var data = await _clientRepository.Where(x => x.Id == request.id)
             .Include(x => x.Review)

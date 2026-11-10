@@ -1,38 +1,57 @@
-﻿using App.Domain.Entities.Main;
-using App.Infrastructure.Context;
+﻿using App.Infrastructure.Context;
+using App.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Hubs;
 
+[Authorize]
 public class ChatHub : Hub
 {
     private readonly AppDbContext _db;
+
     public ChatHub(AppDbContext db)
     {
         _db = db;
     }
 
-    public async Task SendMessage(Guid receiverId, string message)
+    public async Task SendMessage(Guid chatId, string message)
     {
-        var senderId = Context.User?.FindFirst("sub")?.Value;
-        if (senderId == null)
-            return;
+        var senderId = Context.UserIdentifier;
 
-        var chat = new Chats
+        if (string.IsNullOrWhiteSpace(senderId))
+            throw new HubException("Unauthorized.");
+
+        if (string.IsNullOrWhiteSpace(message))
+            throw new HubException("Message cannot be empty.");
+
+        var chat = await _db.Chats
+            .FirstOrDefaultAsync(x =>
+                x.Id == chatId &&
+                (x.FirstUserId == senderId || x.SecondUserId == senderId));
+
+        if (chat == null)
+            throw new HubException("Chat not found.");
+
+        var receiverId = chat.FirstUserId == senderId
+            ? chat.SecondUserId
+            : chat.FirstUserId;
+
+        var newMessage = new Messages()
         {
-            SenderId = Guid.Parse(senderId),
-            RecieverId = receiverId,
-            Message = message,
+            Id = Guid.NewGuid(),
+            ChatId = chatId,
+            SenderId = senderId,
+            Content = message.Trim(),
+            CreatedAt = DateTime.UtcNow
         };
 
-        await _db.Chat.AddAsync(chat);
+        await _db.Messages.AddAsync(newMessage);
         await _db.SaveChangesAsync();
 
-        await Clients.User(receiverId.ToString())
-            .SendAsync("ReceiveMessage", senderId, message);
+        await Clients.User(receiverId).SendAsync("ReceiveMessage", newMessage);
 
-        await Clients.Caller
-            .SendAsync("ReceiveMessage", senderId, message);
+        await Clients.Caller.SendAsync("ReceiveMessage", newMessage);
     }
 }

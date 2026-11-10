@@ -1,5 +1,4 @@
-﻿using App.Application.Common.DTO.ContactUs;
-using App.Application.Common.Responses;
+﻿using App.Application.Common.Responses;
 using MediatR;
 
 namespace App.Application.ContactUs.Query.GetAll;

@@ -1,7 +1,7 @@
 ﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Main;
+using App.Domain.Entities;
 using MediatR;
 
 namespace App.Application.Job.Command.Remove;

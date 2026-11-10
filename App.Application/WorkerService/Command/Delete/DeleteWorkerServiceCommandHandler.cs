@@ -1,7 +1,7 @@
 ﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.WorkerService;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Rel;
+using App.Domain.Entities;
 using MediatR;
 
 namespace App.Application.WorkerService.Command.Delete;

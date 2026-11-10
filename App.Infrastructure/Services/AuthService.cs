@@ -1,19 +1,15 @@
-﻿using App.Application.Common.DTO.Auth;
+﻿using App.Application.Auth.Command.SignIn;
 using App.Application.Common.DTO.Jwt;
 using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Auth;
 using App.Application.Common.Interfaces.Helpers;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
+using App.Domain.Entities;
 using App.Domain.Enums;
 using App.Infrastructure.Identity;
 using Google.Apis.Auth;
-using Google.Apis.Auth.OAuth2.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
-
 namespace App.Infrastructure.Services;
 
 public class AuthService : IAuthService
@@ -36,7 +32,7 @@ public class AuthService : IAuthService
         _refreshesRepository = refreshesRepository;
     }
 
-    public async Task<TokenResponse> SignInAsync(AuthDto dto)
+    public async Task<TokenResponse> SignInAsync(SignInDto dto)
     {
         ApplicationUsers? entity = null;
 
@@ -109,7 +105,7 @@ public class AuthService : IAuthService
             IsRevoked = false,
             Token = refreshToken,
             UserId = entity.Id,
-            ExpiryDate = DateTime.Now.AddDays(1),
+            ExpireDate = DateTime.Now.AddDays(1),
         };
 
         await _refreshesRepository.InsertAsync(refresh);
@@ -124,7 +120,7 @@ public class AuthService : IAuthService
          if (data == null)
             return GenericResponse<string>.Fail("Refresh token not found.");
              
-         if (data.IsRevoked || data.ExpiryDate < DateTime.Now)
+         if (data.IsRevoked || data.ExpireDate < DateTime.Now)
              return GenericResponse<string>.Fail("Refresh token is revoke or expired.");
 
         var jwt = new GenerateJwtDto

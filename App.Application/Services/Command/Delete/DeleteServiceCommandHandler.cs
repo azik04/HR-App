@@ -1,5 +1,4 @@
-﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Services;
+﻿using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
 using MediatR;
 
@@ -7,8 +6,10 @@ namespace App.Application.Services.Command.Delete;
 
 public class DeleteServiceCommandHandler : IRequestHandler<DeleteServiceCommand, GenericResponse<bool>>
 {
-    private readonly IGenericRepository<Domain.Entities.List.Services> _genericRepository;
-    public DeleteServiceCommandHandler(IGenericRepository<Domain.Entities.List.Services> genericRepository) => _genericRepository = genericRepository;
+    private readonly IGenericRepository<Domain.Entities.Services> _genericRepository;
+    public DeleteServiceCommandHandler(
+        IGenericRepository<Domain.Entities.Services> genericRepository) 
+        => _genericRepository = genericRepository;
 
 
     public async Task<GenericResponse<bool>> Handle(DeleteServiceCommand request, CancellationToken cancellationToken)

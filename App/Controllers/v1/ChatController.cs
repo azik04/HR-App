@@ -1,28 +1,32 @@
-﻿using App.Infrastructure.Hubs;
+﻿using App.Application.Chat.Command.Create;
+using App.Application.Chat.Query.GetAll;
+using App.Application.Common.Responses;
+using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
-namespace App.Controllers.v1
+namespace App.Controllers.v1;
+
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiController]
+public class ChatController : ApiControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ChatController : ControllerBase
-    {
-        private readonly IHubContext<ChatHub> _hub;
+    [ProducesResponseType(typeof(GenericResponse<bool>), StatusCodes.Status200OK)] 
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateAsync([FromBody] CreateChatCommand command) 
+    { 
+        var res = await Mediator.Send(command); 
+        return res.Success ? Ok(res) : BadRequest(res);
+    }
+    
+    [ProducesResponseType(typeof(GenericResponse<bool>), StatusCodes.Status200OK)] 
+    [HttpGet("id/{id}/appId/{firstUserId}")]
+    public async Task<IActionResult> CreateAsync([FromRoute] CreateChatRequest request) 
+    { 
+        var command = new CreateChatCommand(request);
 
-        public ChatController(IHubContext<ChatHub> hub) => _hub = hub;
-
-
-        /// <summary>
-        /// Sends a real-time message to a specific user through SignalR.
-        /// </summary>
-        /// <param name="userId">The identifier of the user who will receive the message.</param>
-        /// <param name="message">The message content that will be sent to the user.</param>
-        /// <returns>Returns a task representing the asynchronous send operation.</returns>
-        [HttpPost("user/{userId}/messages")]
-        public async Task Send(string userId, string message)
-        {
-            await _hub.Clients.User(userId).SendAsync("ReceiveMessage", message);
-        }
+        var res = await Mediator.Send(command); 
+        return res.Success ? Ok(res) : BadRequest(res);
     }
 }

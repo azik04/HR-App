@@ -1,4 +1,4 @@
-using App.Application.Common.Interfaces.Account;
+using App.Application.Common.Interfaces;
 using App.Application.Common.Responses;
 using MediatR;
 
@@ -8,9 +8,7 @@ public class SentMailCommandHandler : IRequestHandler<SentMailCommand, GenericRe
 {
     private readonly IAccountService _accountService;
     public SentMailCommandHandler(IAccountService accountService)
-    {
-        _accountService = accountService;
-    }
+        => _accountService = accountService;
 
     
     public async Task<GenericResponse<bool>> Handle(SentMailCommand request, CancellationToken cancellationToken)

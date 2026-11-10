@@ -1,15 +1,8 @@
 using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
-using App.Application.Common.Interfaces.Auth;
-using App.Application.Common.Interfaces.File;
 using App.Application.Common.Interfaces.Helpers;
 using App.Application.Common.Interfaces.Integrations;
-using App.Application.Common.Interfaces.Refresh;
-using App.Domain.Entities.Acc;
-using App.Domain.Entities.History;
-using App.Domain.Entities.List;
-using App.Domain.Entities.Main;
-using App.Domain.Entities.Rel;
+using App.Application.Common.Interfaces.Repository;
+using App.Domain.Entities;
 using App.Infrastructure.BackgroundJob;
 using App.Infrastructure.Context;
 using App.Infrastructure.Helpers;
@@ -32,6 +25,7 @@ public static class ServiceDependency
             .AddDefaultTokenProviders();
         
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenHelper, TokenHelper>();
         services.AddScoped<IAppFileService, AppFileService>();
@@ -39,15 +33,18 @@ public static class ServiceDependency
         services.AddScoped<IRefreshService, RefreshService>();
 
         services.AddScoped<IGenericRepository<WorkerJobHistories>, GenericRepository<WorkerJobHistories>>();
-
+        services.AddScoped<IGenericRepository<Chats>, GenericRepository<Chats>>();
+        services.AddScoped<IGenericRepository<Messages>, GenericRepository<Messages>>();
         services.AddScoped<IGenericRepository<Refreshes>, GenericRepository<Refreshes>>();
+        services.AddScoped<IGenericRepository<Payments>, GenericRepository<Payments>>();
+        services.AddScoped<IGenericRepository<Subscriptions>, GenericRepository<Subscriptions>>();
         services.AddScoped<IGenericRepository<Clients>, GenericRepository<Clients>>();
         services.AddScoped<IGenericRepository<Addresses>, GenericRepository<Addresses>>();
         services.AddScoped<IGenericRepository<Workers>, GenericRepository<Workers>>();
 
-        services.AddScoped<IGenericRepository<Domain.Entities.List.Services>, GenericRepository<Domain.Entities.List.Services>>();
+        services.AddScoped<IGenericRepository<Domain.Entities.Services>, GenericRepository<Domain.Entities.Services>>();
         services.AddScoped<IGenericRepository<Reviews>, GenericRepository<Reviews>>();
-        services.AddScoped<IGenericRepository<AppFiles>, GenericRepository<AppFiles>>();
+        services.AddScoped<IGenericRepository<JobFiles>, GenericRepository<JobFiles>>();
         services.AddScoped<IGenericRepository<Jobs>, GenericRepository<Jobs>>();
         services.AddScoped<IGenericRepository<ContactUs>, GenericRepository<ContactUs>>();
         services.AddScoped<IGenericRepository<WorkerServices>, GenericRepository<WorkerServices>>();

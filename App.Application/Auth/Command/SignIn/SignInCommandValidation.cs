@@ -2,12 +2,10 @@
 
 namespace App.Application.Auth.Command.SignIn;
 
-public class SignInCommandValidation : AbstractValidator<SignInCommand>
+public class SignInCommandValidation : AbstractValidator<SignInDto>
 {
     public SignInCommandValidation()
     {
-
-
         RuleFor(x => x.AuthType).NotEmpty().WithMessage("AuthType is required.").Must(x => x == 1 || x == 2).WithMessage("AuthType must be 1 or 2.");
 
         When(x => x.AuthType == 1, () =>

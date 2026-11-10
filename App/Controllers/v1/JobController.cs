@@ -1,10 +1,7 @@
 using App.Application.Address.Command.Delate;
-using App.Application.Address.Query.GetAll;
-using App.Application.Common.DTO.Job;
 using App.Application.Common.Responses;
 using App.Application.Job.Command.Create;
-using App.Application.Job.Query.GetAllByWorker;
-using App.Application.Job.Query.GetAllHandled;
+using App.Application.Job.Query.GetAll;
 using App.Application.Job.Query.GetById;
 using App.Domain.Enums;
 using Asp.Versioning;
@@ -17,22 +14,6 @@ namespace App.Controllers.v1;
 [ApiController]
 public class JobController : ApiControllerBase
 {
-    /// <summary>
-    /// Retrieves all handled jobs.
-    /// </summary>
-    /// <param name="command">Contains the client identifier.</param>
-    /// <returns>Returns a list of jobs for the specified client.</returns>
-    [ProducesResponseType(typeof(GenericResponse<List<GetAllJobDto>>), StatusCodes.Status200OK)]
-    [HttpGet("appId/{appId}")]
-    public async Task<IActionResult> GetAllHandledAsync([FromRoute] string appId, [FromQuery] int? serviceId, [FromQuery] Statuses jobStatus)
-    {
-        var query = new GetAllHandledJobQuery(appId, serviceId, jobStatus);
-
-        var res = await Mediator.Send(query);
-        return res.Success ? Ok(res) : BadRequest(res);
-    }
-
-
     /// <summary>
     /// Retrieves all jobs associated with a specific service.
     /// </summary>

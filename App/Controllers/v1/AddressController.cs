@@ -3,7 +3,6 @@ using App.Application.Address.Command.Delate;
 using App.Application.Address.Command.Update;
 using App.Application.Address.Query.GetAll;
 using App.Application.Address.Query.GetById;
-using App.Application.Common.DTO.Address;
 using App.Application.Common.Responses;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

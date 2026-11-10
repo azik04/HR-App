@@ -2,6 +2,7 @@
 using App.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using App.Application.Common.Interfaces.Repository;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {

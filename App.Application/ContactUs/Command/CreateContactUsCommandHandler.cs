@@ -1,5 +1,5 @@
-﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Integrations;
+﻿using App.Application.Common.Interfaces.Integrations;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
 using App.Domain.Enums;
 using MediatR;
@@ -8,9 +8,9 @@ namespace App.Application.ContactUs.Command;
 
 public class CreateContactUsCommandHandler : IRequestHandler<CreateContactUsCommand, GenericResponse<bool>>
 {
-    private readonly IGenericRepository<Domain.Entities.Main.ContactUs> _contactUsRepository;
+    private readonly IGenericRepository<Domain.Entities.ContactUs> _contactUsRepository;
     private readonly IEmailService _emailService;
-    public CreateContactUsCommandHandler(IGenericRepository<Domain.Entities.Main.ContactUs> contactUsRepository, IEmailService emailService)
+    public CreateContactUsCommandHandler(IGenericRepository<Domain.Entities.ContactUs> contactUsRepository, IEmailService emailService)
     {
         _contactUsRepository = contactUsRepository;
         _emailService = emailService;
@@ -18,7 +18,7 @@ public class CreateContactUsCommandHandler : IRequestHandler<CreateContactUsComm
 
     public async Task<GenericResponse<bool>> Handle(CreateContactUsCommand request, CancellationToken cancellationToken)
     {
-        var data = new Domain.Entities.Main.ContactUs
+        var data = new Domain.Entities.ContactUs
         {
             Email = request.Email,
             FullName = request.FullName,

@@ -1,10 +1,6 @@
-﻿using App.Application.Common.DTO.Job;
-using App.Application.Common.DTO.Review;
-using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
-using App.Application.Common.Interfaces.Reviews;
+﻿using App.Application.Common.Interfaces;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +8,9 @@ namespace App.Application.Reviews.Query.GetAll;
 
 public class GetAllReviewQueryHandler : IRequestHandler<GetAllReviewQuery, GenericResponse<List<GetAllReviewDto>>>
 {
-    private readonly IGenericRepository<Domain.Entities.Main.Reviews> _reviewRepository;
+    private readonly IGenericRepository<Domain.Entities.Reviews> _reviewRepository;
     private readonly IAccountService _accountService;
-    public GetAllReviewQueryHandler(IGenericRepository<Domain.Entities.Main.Reviews> genericRepository,
+    public GetAllReviewQueryHandler(IGenericRepository<Domain.Entities.Reviews> genericRepository,
         IAccountService accountService)
     {
         _reviewRepository = genericRepository;

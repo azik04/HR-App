@@ -1,19 +1,18 @@
-﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.File;
-using App.Application.Common.Interfaces.Reviews;
+﻿using App.Application.Common.Interfaces.Helpers;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.List;
+using App.Domain.Entities;
 using MediatR;
 
 namespace App.Application.Reviews.Command.Create;
 
 public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, GenericResponse<bool>>
 {
-    private readonly IGenericRepository<Domain.Entities.Main.Reviews> _reviewRepository;
+    private readonly IGenericRepository<Domain.Entities.Reviews> _reviewRepository;
     private readonly IGenericRepository<ReviewFiles> _reviewFileRepository;
     private readonly IAppFileService _appFileService;
 
-    public CreateReviewCommandHandler(IGenericRepository<Domain.Entities.Main.Reviews> reviewRepository, IAppFileService appFileService,
+    public CreateReviewCommandHandler(IGenericRepository<Domain.Entities.Reviews> reviewRepository, IAppFileService appFileService,
         IGenericRepository<ReviewFiles> reviewFileRepository)
     {
         _reviewRepository = reviewRepository;
@@ -23,7 +22,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, G
 
     public async Task<GenericResponse<bool>> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
-        var data = new Domain.Entities.Main.Reviews()
+        var data = new Domain.Entities.Reviews()
         {
             ClientId = request.ClientId,
             WorkerId = request.WorkerId,

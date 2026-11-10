@@ -1,5 +1,3 @@
-using App.Application.Address.Query.GetAll;
-using App.Application.Common.DTO.Review;
 using App.Application.Common.Responses;
 using App.Application.Reviews.Command.Create;
 using App.Application.Reviews.Query.GetAll;

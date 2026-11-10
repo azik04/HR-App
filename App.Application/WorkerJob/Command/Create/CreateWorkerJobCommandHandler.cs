@@ -1,10 +1,7 @@
 ﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.Account;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
-using App.Domain.Entities.History;
-using App.Domain.Entities.Main;
-using App.Domain.Entities.Rel;
+using App.Domain.Entities;
 using App.Domain.Enums;
 using MediatR;
 
@@ -36,7 +33,7 @@ public class CreateWorkerJobCommandHandler : IRequestHandler<CreateWorkerJobComm
         if (job == null)
             return GenericResponse<bool>.Fail("Job not found");
 
-        if (job.Statuses == Statuses.Done)
+        if (job.JobStatuses == JobStatuses.Done)
             return GenericResponse<bool>.Fail("Jon has been done");
           
         var worker = await _workerRepository.GetByIdAsync(request.WorkerId, null, cancellationToken);
@@ -45,7 +42,7 @@ public class CreateWorkerJobCommandHandler : IRequestHandler<CreateWorkerJobComm
 
         var workerJob = _workerJobRepository.Where(x => x.WorkerId == request.WorkerId && x.JobId == request.JobId).FirstOrDefault();
 
-        if (job.Statuses == Statuses.Active)
+        if (job.JobStatuses == JobStatuses.Active)
         {
             if (request.workerJobStatus != null)
                 return GenericResponse<bool>.Fail("Cant be canceled or submited with out handling");
@@ -72,13 +69,13 @@ public class CreateWorkerJobCommandHandler : IRequestHandler<CreateWorkerJobComm
 
             await _workerJobHistoryRepository.InsertAsync(workerJobHistory, cancellationToken);
 
-            job.Statuses = Statuses.IsHandled;
+            job.JobStatuses = JobStatuses.IsHandled;
 
             await _jobRepository.Update(job, cancellationToken);
 
             return GenericResponse<bool>.Ok(true);
         }
-        else if (job.Statuses == Statuses.IsHandled)
+        else if (job.JobStatuses == JobStatuses.IsHandled)
         {
             switch (request.workerJobStatus)
             {
@@ -91,7 +88,7 @@ public class CreateWorkerJobCommandHandler : IRequestHandler<CreateWorkerJobComm
 
                     await _workerJobHistoryRepository.InsertAsync(CreateHistory(workerJob), cancellationToken);
 
-                    job.Statuses = Statuses.Active;
+                    job.JobStatuses = JobStatuses.Active;
 
                     await _jobRepository.Update(job, cancellationToken);
 
@@ -108,7 +105,7 @@ public class CreateWorkerJobCommandHandler : IRequestHandler<CreateWorkerJobComm
 
                     await _workerJobHistoryRepository.InsertAsync(CreateHistory(workerJob), cancellationToken);
 
-                    job.Statuses = Statuses.Done;
+                    job.JobStatuses = JobStatuses.Done;
 
                     await _jobRepository.Update(
                         job,
@@ -122,7 +119,7 @@ public class CreateWorkerJobCommandHandler : IRequestHandler<CreateWorkerJobComm
             return GenericResponse<bool>.Ok(true);
 
         }
-        else if (job.Statuses == Statuses.Done)
+        else if (job.JobStatuses == JobStatuses.Done)
             return GenericResponse<bool>.Ok(true);
 
         return GenericResponse<bool>.Fail("Something went wrong");

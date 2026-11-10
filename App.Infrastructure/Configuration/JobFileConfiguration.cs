@@ -1,0 +1,15 @@
+﻿using App.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace App.Infrastructure.Configuration;
+
+public class JobFileConfiguration : IEntityTypeConfiguration<JobFiles>
+{
+    public void Configure(EntityTypeBuilder<JobFiles> builder)
+    {
+        builder.HasKey(x => x.Id);
+
+        builder.HasOne(x => x.Job).WithMany(x => x.JobFile).HasForeignKey(x => x.JobId).OnDelete(DeleteBehavior.Restrict);
+    }
+}

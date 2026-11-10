@@ -1,10 +1,7 @@
-﻿using App.Application.Common.Interfaces;
-using App.Application.Common.Interfaces.File;
-using App.Application.Common.Interfaces.Job;
+﻿using App.Application.Common.Interfaces.Helpers;
+using App.Application.Common.Interfaces.Repository;
 using App.Application.Common.Responses;
-using App.Domain.Entities.Acc;
-using App.Domain.Entities.List;
-using App.Domain.Entities.Main;
+using App.Domain.Entities;
 using MediatR;
 
 namespace App.Application.Job.Command.Create;
@@ -12,10 +9,10 @@ namespace App.Application.Job.Command.Create;
 public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, GenericResponse<bool>>
 {
     private readonly IGenericRepository<Jobs> _jobRepository;
-    private readonly IGenericRepository<AppFiles> _appFileRepository;
+    private readonly IGenericRepository<JobFiles> _appFileRepository;
     private readonly IAppFileService _appFileService;
     public CreateJobCommandHandler(IGenericRepository<Jobs> jobRepository, IAppFileService appFileService,
-        IGenericRepository<AppFiles> appFileRepository)
+        IGenericRepository<JobFiles> appFileRepository)
     {
         _jobRepository = jobRepository;
         _appFileService = appFileService;
@@ -30,7 +27,7 @@ public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, Generic
             Name = request.Name,
             Description = request.Description,
             ClientId = request.ClientId,
-            Statuses = Domain.Enums.Statuses.Active,
+            JobStatuses = Domain.Enums.JobStatuses.Active,
             AddressId = request.AddressId,
             CreateAt = DateTime.Now,
             ServiceId = request.ServiceId,
@@ -45,7 +42,7 @@ public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, Generic
 
         foreach (var item in insert.Data)
         {
-            var photo = new AppFiles
+            var photo = new JobFiles
             {
                 JobId = data.Id,
                 FilePath = item

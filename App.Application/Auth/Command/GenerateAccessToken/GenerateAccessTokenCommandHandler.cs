@@ -1,4 +1,4 @@
-using App.Application.Common.Interfaces.Auth;
+using App.Application.Common.Interfaces;
 using App.Application.Common.Responses;
 using MediatR;
 
@@ -7,8 +7,8 @@ namespace App.Application.Auth.Command.GenerateAccessToken;
 public class GenerateAccessTokenCommandHandler : IRequestHandler<GenerateAccessTokenCommand, GenericResponse<string>>
 {
     private readonly IAuthService _authService;
-
-    public GenerateAccessTokenCommandHandler(IAuthService authService) => _authService = authService;
+    public GenerateAccessTokenCommandHandler(IAuthService authService) 
+        => _authService = authService;
     
     public async Task<GenericResponse<string>> Handle(GenerateAccessTokenCommand request, CancellationToken cancellationToken)
     {
